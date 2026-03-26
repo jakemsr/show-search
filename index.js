@@ -15,7 +15,7 @@ async function getShows(event) {
 		return;
 	}
 
-    const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&t=movie&r=json&s=${searchString}`;
+    const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&type=movie&r=json&s=${searchString}`;
 
     const showsDiv = document.querySelector('.shows');
 
@@ -31,6 +31,8 @@ async function getShows(event) {
 
 	// only use first 6 results
 	shows = requestData.Search.slice(0,6);
+
+	console.log(shows);
 
 	renderShows(sortOrder);
 }
