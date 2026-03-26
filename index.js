@@ -15,7 +15,7 @@ async function getShows(event) {
 		return;
 	}
 
-    const requestURL = `http://www.omdbapi.com/?apikey=76dbaf2b&t=movie&r=json&s=${searchString}`;
+    const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&t=movie&r=json&s=${searchString}`;
 
     const showsDiv = document.querySelector('.shows');
 
