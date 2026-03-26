@@ -32,8 +32,6 @@ async function getShows(event) {
 	// only use first 6 results
 	shows = requestData.Search.slice(0,6);
 
-	console.log(shows);
-
 	renderShows(sortOrder);
 }
 
