@@ -9,28 +9,61 @@ let shows;
 async function getShows(event) {
 
 	const sortOrder = event.target.elements.filter.value;
-
+	let maxResults = event.target.elements.maxResults.value;
+	maxResults = parseInt(maxResults);
+	if (!maxResults) {
+		maxResults = 10;
+	}
+	let maxPages = Math.floor(maxResults / 10);
+	if (maxResults % 10) {
+		maxPages += 1;
+	}
+	console.log("max results: " + maxResults);
 	const searchString = event.target.elements.searchText.value;
 	if (!searchString) {
 		return;
 	}
 
-    const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&type=movie&r=json&s=${searchString}`;
+	// empty the shows array on each new search
+	shows = [];
 
-    const showsDiv = document.querySelector('.shows');
+	const showsDiv = document.querySelector('.shows');
 
 	// reset the shows HTML for each new search so we actually get the spinner
 	showsDiv.innerHTML = `<i class="fas fa-spinner"></i>`;
 
 	showsDiv.classList.add("shows__loading");
 
-	const request = await fetch(requestURL);
-    const requestData = await request.json();
+	let numResults = 0;
+
+	for (let page = 1; page <= maxPages; page++) {
+
+		const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&type=movie&r=json&page=${page}&s=${searchString}`;
+
+		const request = await fetch(requestURL);
+	    const requestData = await request.json();
+
+		if (page === 1) {
+			console.log("totalResults: " + requestData.totalResults);
+			if (requestData.totalResults < maxResults) {
+				maxResults = requestData.totalResults;
+				maxPages = Math.floor(requestData.totalResults / 10);
+				if (requestData.totalResults % 10) {
+					maxPages += 1;
+				}
+			}
+		}
+
+		let sliceNum = 10;
+		numResults += requestData.Search.length;
+		if (numResults > maxResults) {
+			sliceNum = sliceNum - (numResults - maxResults);
+		}
+
+		shows.push(...requestData.Search.slice(0,sliceNum));
+	}
 
 	showsDiv.classList.remove("shows__loading");
-
-	// only use first 6 results
-	shows = requestData.Search.slice(0,6);
 
 	renderShows(sortOrder);
 }
@@ -62,20 +95,7 @@ function renderShows(sortOrder) {
 
     const showsDiv = document.querySelector('.shows');
 
-	showsDiv.innerHTML = `
-    <div class="show__heading">
-      <div class="show__title">
-        Title
-      </div>
-      <div class="show__year">
-        Year
-      </div>
-      <div class="show__img">
-        Poster
-      </div>
-    </div>`;
-
-    showsDiv.innerHTML += shows.map(show => getShowHTML(show)).join("");
+    showsDiv.innerHTML = shows.map(show => getShowHTML(show)).join("");
 }
 
 /**
@@ -87,14 +107,14 @@ function renderShows(sortOrder) {
 function getShowHTML(show) {
     return `
     <div class="show">
+      <div class="show__img">
+        <img src="${show.Poster}" class="image">
+      </div>
       <div class="show__title">
         ${show.Title}
       </div>
       <div class="show__year">
         ${show.Year}
-      </div>
-      <div class="show__img">
-        <img src="${show.Poster}" class="image">
       </div>
     </div>`;
 }

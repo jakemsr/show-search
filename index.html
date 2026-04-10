@@ -31,15 +31,24 @@
       </div>
       <div class="search-bar">
         <form id="search_shows" onsubmit="searchShows(event)">
-          <input type="text" id="searchText" placeholder="Search by Title">
-          <select id="filter" onchange="filterShows(event)">
-            <option value="" disabled selected>Sort Order</option>
-            <option value="TITLE_A_TO_Z">Title, A-Z</option>
-            <option value="TITLE_Z_TO_A">Title, Z-A</option>
-            <option value="YEAR_LOW_TO_HIGH">Year, Low to High</option>
-            <option value="YEAR_HIGH_TO_LOW">Year, High to Low</option>
-          </select>
-          <input type="submit" class="btn" value="Search">
+          <div class="form__text">
+            <input type="text" id="searchText" placeholder="Search by Title">
+          </div>
+          <div class="form__select">
+            <select id="filter" onchange="filterShows(event)">
+              <option value="" disabled selected>Sort Order</option>
+              <option value="TITLE_A_TO_Z">Title, A-Z</option>
+              <option value="TITLE_Z_TO_A">Title, Z-A</option>
+              <option value="YEAR_LOW_TO_HIGH">Year, Low to High</option>
+              <option value="YEAR_HIGH_TO_LOW">Year, High to Low</option>
+            </select>
+          </div>
+          <div class="form__text">
+            <input type="text" id="maxResults" placeholder="Maximum Results">
+          </div>
+          <div class="form__submit">
+            <input type="submit" class="btn" value="Search">
+          </div>
         </form>
       </div>
       <div class="shows">
