@@ -20,8 +20,8 @@
     height: 64px;
     max-width: 1280px;
     padding: 24px;
-    background-color: #8455ad;
-    color: #fff;
+    background-color: #5c0380; /* #8455ad; */
+    color: #dedede;
 }
 
 .nav__logo {
@@ -29,7 +29,7 @@
 }
 
 .nav__links {
-    font-size: 16px;
+    font-size: 24px;
 }
 
 .nav__link {
@@ -38,11 +38,15 @@
 }
 
 #landing-page {
+    background-image: url("film_roll.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #ebdbf9;
-    color: #5c0380;
+    background-color: #222; /*  #ebdbf9; */
+    color: #fefefe; /* #5c0380; */
     height: calc(100dvh - 128px);
     overflow-y: scroll;
     width: 100%;
@@ -59,9 +63,8 @@
     font-size: 24px;
 }
 
-
 .search-bar {
-    padding: 8px 0;
+    padding: 16px 0;
     font-size: 24px;
     text-align: center;
 }
@@ -76,32 +79,61 @@
 
 input,
 select {
-    margin: 0 4px;
+    margin: 2px 4px;
     width: 240px;
     height: 40px;
-    border: 2px solid #8455ad;
-    color: #8455ad;
-    background-color: #fff;
+    border: none; /* 2px solid #5c0380; */ /* #8455ad; */
     border-radius: 8px;
     font-size: 24px;
     text-align: center;
+}
+
+.input__searchText,
+.input__maxResults,
+.input__filter {
+    position: relative;
+}
+
+.tooltip__searchText,
+.tooltip__maxResults,
+.tooltip__filter {
+    position: absolute;
+    width: 240px;
+    left: 4px;
+    top: 105%;
+    visibility: hidden;
+    z-index: 1;
+    font-size: 16px;
+    background: #000;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+}
+
+.input__searchText:hover .tooltip__searchText,
+.input__maxResults:hover .tooltip__maxResults,
+.input__filter:hover .tooltip__filter {
+    visibility: visible;
+}
+
+input::placeholder {
+    color: #000;
 }
 
 .btn {
     width: auto;
     padding: 0 8px;
     height: 40px;
-    border: 2px solid #8455ad;
+    border: none; /* 2px solid #8455ad; */
     color: #fff;
     cursor: pointer;
-    background-color: #8455ad;
+    background-color: #5c0380; /* #8455ad; */
     border-radius: 8px;
     font-size: 24px;
-    transition: opacity 300ms ease;
+    transition: all 300ms ease;
 }
 
 .btn:hover {
-    opacity: 0.8;
+    filter: brightness(125%);
 }
 
 .shows {
@@ -122,6 +154,14 @@ select {
     margin: 0 auto;
     text-align: center;
     height: 330px;
+    position: relative;
+}
+
+.show-plot {
+    background: #000;
+    width: 100%;
+    border-radius: 10px;
+    position: absolute;
 }
 
 .image {
@@ -168,8 +208,8 @@ footer {
     width: 100%;
     max-width: 1280px;
     padding: 24px;
-    background-color: #8455ad;
-    color: #fff;
+    background-color:#5c0380; /* #8455ad; */
+    color: #dedede;
 }
 
 footer a {
@@ -200,18 +240,24 @@ footer a {
     }
 
     input,
-    select,
-    .btn {
+    select {
+        height: 28px;
         padding: 4px 0;
-        font-size: 16px;
-    }
-    .btn {
-        padding: 0 4px;
+        font-size: 18px;
+        width: 150px;
     }
 
-    #search_shows {
-        display: flex;
-        flex-direction: column;
+    .tooltip__searchText,
+    .tooltip__maxResults,
+    .tooltip__filter {
+        width: 150px;
+        font-size: 12px;
+    }
+
+    .btn {
+        height: 28px;
+        font-size: 18px;
+        padding: 0 4px;
     }
 
     footer {

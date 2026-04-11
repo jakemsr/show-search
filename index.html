@@ -31,10 +31,13 @@
       </div>
       <div class="search-bar">
         <form id="search_shows" onsubmit="searchShows(event)">
-          <div class="form__text">
+          <div class="input__searchText">
             <input type="text" id="searchText" placeholder="Search by Title">
+            <span class="tooltip__searchText">
+              Words to match in movie titles.
+            </span>
           </div>
-          <div class="form__select">
+          <div class="input__filter">
             <select id="filter" onchange="filterShows(event)">
               <option value="" disabled selected>Sort Order</option>
               <option value="TITLE_A_TO_Z">Title, A-Z</option>
@@ -42,9 +45,15 @@
               <option value="YEAR_LOW_TO_HIGH">Year, Low to High</option>
               <option value="YEAR_HIGH_TO_LOW">Year, High to Low</option>
             </select>
+            <span class="tooltip__filter">
+              How to order matching movies.
+            </span>
           </div>
-          <div class="form__text">
+          <div class="input__maxResults">
             <input type="text" id="maxResults" placeholder="Maximum Results">
+            <span class="tooltip__maxResults">
+              Maximum number of movies to display.
+            </span>
           </div>
           <div class="form__submit">
             <input type="submit" class="btn" value="Search">

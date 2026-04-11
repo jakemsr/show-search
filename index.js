@@ -1,5 +1,8 @@
 // global variable to sort without re-fetching 
-let shows;
+const shows = [];
+
+// global to avoid re-fetching on each onmouseenter
+const showPlots = {};
 
 /**
  * fetches show information into the global shows array
@@ -14,18 +17,19 @@ async function getShows(event) {
 	if (!maxResults) {
 		maxResults = 10;
 	}
+
 	let maxPages = Math.floor(maxResults / 10);
 	if (maxResults % 10) {
 		maxPages += 1;
 	}
-	console.log("max results: " + maxResults);
+
 	const searchString = event.target.elements.searchText.value;
 	if (!searchString) {
 		return;
 	}
 
 	// empty the shows array on each new search
-	shows = [];
+	shows.length = 0;
 
 	const showsDiv = document.querySelector('.shows');
 
@@ -44,7 +48,6 @@ async function getShows(event) {
 	    const requestData = await request.json();
 
 		if (page === 1) {
-			console.log("totalResults: " + requestData.totalResults);
 			if (requestData.totalResults < maxResults) {
 				maxResults = requestData.totalResults;
 				maxPages = Math.floor(requestData.totalResults / 10);
@@ -68,6 +71,21 @@ async function getShows(event) {
 	renderShows(sortOrder);
 }
 
+async function getPlot(id) {
+	if (!showPlots[id]) {
+		const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&type=movie&r=json&plot=short&i=${id}`;
+		const request = await fetch(requestURL);
+		const requestData = await request.json();
+		showPlots[id] = requestData.Plot;
+	}
+    const showSpan = document.getElementById(id);
+	showSpan.innerHTML = showPlots[id];
+}
+
+function dropPlot(id) {
+    const showSpan = document.getElementById(id);
+	showSpan.innerHTML = "";
+}
 
 /**
  * sorts the shows array and displays the show information
@@ -106,9 +124,10 @@ function renderShows(sortOrder) {
  */
 function getShowHTML(show) {
     return `
-    <div class="show">
+    <div class="show" onmouseenter="getPlot('${show.imdbID}')" onmouseleave="dropPlot('${show.imdbID}')">
+	  <span id="${show.imdbID}" class="show-plot"></span>
       <div class="show__img">
-        <img src="${show.Poster}" class="image">
+        <img src="${show.Poster}" onerror="this.src='no_img.svg'" class="image">
       </div>
       <div class="show__title">
         ${show.Title}
@@ -137,7 +156,7 @@ function searchShows(event) {
 function filterShows(event) {
 	const sortOrder = event.target.value;
 	// don't try to render shows if they haven't been fetched yet
-	if (!shows) {
+	if (!shows.length) {
 		return;
 	}
 	renderShows(sortOrder);
