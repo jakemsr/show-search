@@ -25,6 +25,8 @@ async function getShows(event) {
 
 	const searchString = event.target.elements.searchText.value;
 	if (!searchString) {
+	    const showsDiv = document.querySelector('.shows');
+		showsDiv.innerHTML += "<h3 class='fade-out-text'>Please enter words to match in the 'Search by Title' box!</h3>";
 		return;
 	}
 
@@ -66,25 +68,30 @@ async function getShows(event) {
 		shows.push(...requestData.Search.slice(0,sliceNum));
 	}
 
+	const uniqueShows = [...new Map(shows.map(show => [show.imdbID, show])).values()];
+	shows.length = 0;
+	shows.push(...uniqueShows);
+
 	showsDiv.classList.remove("shows__loading");
 
 	renderShows(sortOrder);
 }
 
 async function getPlot(id) {
+    const showSpan = document.getElementById(id);
 	if (!showPlots[id]) {
 		const requestURL = `https://www.omdbapi.com/?apikey=76dbaf2b&type=movie&r=json&plot=short&i=${id}`;
 		const request = await fetch(requestURL);
 		const requestData = await request.json();
 		showPlots[id] = requestData.Plot;
+		showSpan.innerText = showPlots[id];
 	}
-    const showSpan = document.getElementById(id);
-	showSpan.innerHTML = showPlots[id];
+	showSpan.classList.add("plot-visible");
 }
 
 function dropPlot(id) {
     const showSpan = document.getElementById(id);
-	showSpan.innerHTML = "";
+	showSpan.classList.remove("plot-visible");
 }
 
 /**
@@ -123,9 +130,10 @@ function renderShows(sortOrder) {
  * @returns string for map()
  */
 function getShowHTML(show) {
+	const plot = showPlots[show.imdbID] || "";
     return `
     <div class="show" onmouseenter="getPlot('${show.imdbID}')" onmouseleave="dropPlot('${show.imdbID}')">
-	  <span id="${show.imdbID}" class="show-plot"></span>
+	  <span id="${show.imdbID}" class="show-plot">${plot}</span>
       <div class="show__img">
         <img src="${show.Poster}" onerror="this.src='no_img.svg'" class="image">
       </div>
